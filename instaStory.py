@@ -7,6 +7,7 @@ from pynput.keyboard import Key, Controller
 
 #Your instagram username
 username=""
+#Your instagram password
 password=""
 photoName="" #Photo must be placed in the user directory
 
