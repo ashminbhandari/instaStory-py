@@ -79,9 +79,3 @@ keyboard.release(Key.shift)
 time.sleep(1)
 
 driver.find_element_by_xpath("//*[@id='react-root']/section/footer/div/div/button").click()
-
-
-
-
-
-
