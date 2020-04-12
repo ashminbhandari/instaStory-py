@@ -1,19 +1,31 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+import pickle #Cookie dumps
 from pynput.keyboard import Key, Controller
+
+def executeElement(xPath, sleepTime, keys):
+    try:
+        if(keys != '0'):
+            driver.find_element_by_xpath(xPath).send_keys(keys)
+        else:
+            driver.find_element_by_xpath(xPath).click()
+        time.sleep(sleepTime)
+    except NoSuchElementException:
+        print("Couldn't find an element")
 
 #Your instagram username
 username=""
-#Your instagram password
 password=""
-photoName="" #Photo must be placed in the user directory
+photoName="IMG" #Photo must be placed in the user directory
 
 #Mobile emulation needed for story uploads
 mobile_emulation = { "deviceName": "Pixel 2" }
 chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("user-data-dir=selenium")
 chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
 
 #Start up driver
@@ -24,31 +36,25 @@ driver.get('http://instagram.com/accounts/login')
 time.sleep(3)
 
 #Insert username
-driver.find_element_by_xpath("//*[@id='react-root']/section/main/article/div/div/div/form/div[4]/div/label/input").send_keys(username)
-time.sleep(1)
+executeElement("//*[@id='react-root']/section/main/article/div/div/div/form/div[4]/div/label/input", 1, username)
 
 #Insert password
-driver.find_element_by_xpath("//*[@id='react-root']/section/main/article/div/div/div/form/div[5]/div/label/input").send_keys(password)
-time.sleep(1)
+executeElement("//*[@id='react-root']/section/main/article/div/div/div/form/div[5]/div/label/input", 1, password)
 
 #Click login
-driver.find_element_by_xpath("//*[@id='react-root']/section/main/article/div/div/div/form/div[7]/button/div").click()
-time.sleep(5)
+executeElement("//*[@id='react-root']/section/main/article/div/div/div/form/div[7]/button/div", 5, '0')
 
-#Click not now
-driver.find_element_by_xpath("//*[@id='react-root']/section/main/div/div/div/button").click()
-time.sleep(2)
+#Click save info
+executeElement("//*[@id='react-root']/section/main/div/div/section/div/button", 5, '0')
 
 #Click cancel
-driver.find_element_by_xpath("/html/body/div[4]/div/div/div[3]/button[2]").click()
-time.sleep(0.5)
+executeElement("/html/body/div[4]/div/div/div[3]/button[2]", 5, '0')
 
 #Click add story
-driver.find_element_by_xpath("//*[@id='react-root']/section/main/section/div[1]/div/div/div/div[1]/button").click()
-time.sleep(0.5)
+executeElement("//*[@id='react-root']/section/nav[1]/div/div/header/div/div[1]/button", 1, '0')
 
 #Click not now again
-driver.find_element_by_xpath("/html/body/div[4]/div/div[2]/div/div[5]/button").click()
+executeElement("/html/body/div[4]/div/div[2]/div/div[5]/button", 1, '0')
 
 #Activate keyboard
 keyboard = Controller()
@@ -79,4 +85,15 @@ keyboard.release(Key.cmd)
 keyboard.release(Key.shift)
 time.sleep(1)
 
-driver.find_element_by_xpath("//*[@id='react-root']/section/footer/div/div/button").click()
+executeElement("//*[@id='react-root']/section/footer/div/div/button", 10, '0')
+
+driver.close()
+
+
+
+
+
+
+
+
+
